@@ -1,0 +1,26 @@
+label{
+color:white;
+
+text-align: initial;
+font-weight: bold;
+
+}
+#id_username ,#id_password {
+
+    width: 200px;
+    margin-bottom: 20px;
+    margin-left : 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+}
+
+@media screen and (max-width:350px){
+#id_username ,#id_password,label{
+
+width: 100%;
+ height: auto;
+ margin-left:0px;
+}
+
+
+}

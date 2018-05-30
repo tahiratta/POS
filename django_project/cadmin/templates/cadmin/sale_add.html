@@ -1,0 +1,628 @@
+
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+Add New sale - {{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+<head><style>
+
+#id_customer ,
+#id_totalBill ,
+
+#id_discount ,
+
+#id_receivedAmount  {
+      width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+}
+.item {
+  display: inline-block;
+  position: relative;
+}
+.t-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+</style>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!-- <script type="text/javascript">
+  $(document).ready(function()
+  {
+    $('#id_form-0-barcode').keyup(function()
+    {
+      var search = $('#id_form-0-barcode').val();
+      if($.trim(search.length) == 0)
+      {
+        $('#result').html('Please enter searching keyword');
+      }
+      else
+      {
+        $.ajax({
+          type : 'POST',
+          url : '',
+          data : {'search' : search}
+          success : function(data)
+          {
+            $('#result').html(data);
+          }
+
+        })
+      }
+      })
+    })
+</script>  -->
+
+<script type="text/javascript">
+  $(function()
+  {
+    $('#id_form-0-barcode').keyup(function()
+    {
+
+       clearTimeout(typingTimer);
+      if ($('#id_form-0-barcode').val) {
+        typingTimer = setTimeout(function(){
+            //do stuff here e.g ajax call etc....
+             var v = $("#id_form-0-barcode").val();
+             $("#out").html(v);
+        }, doneTypingInterval);
+    }
+       // console.log(x); 
+      // var url = "{% url 'search' %}";
+      // console.log(url)
+      $.ajax({
+          type : "POST",
+          url : "/cadmin/search/",
+          data : {'search_text' : $('#id_form-0-barcode').val(),
+          'csrfmiddlewaretoken' : $("input[name = csrfmiddlewaretoken]").val()
+        },
+        success: searchSuccess,
+        dataType: 'html'
+      });
+    });
+  });
+  function searchSuccess(data, textStatus, jqXHR)
+  {
+   
+    $('#search_results').html(data);
+    if(data.length>0)
+                    {
+                        console.log(data);
+                    }
+  }
+  //setup before functions
+var typingTimer;                //timer identifier
+var doneTypingInterval = 1000;  //time in ms, 5 second for example
+
+//on keyup, start the countdown
+$('#id_form-0-barcode').keyup(function(){
+    
+});
+
+
+
+</script> 
+
+<!-- 
+<script type="text/javascript">
+$(document).ready(function() {
+  // Code adapted from http://djangosnippets.org/snippets/1389/
+
+  function updateElementIndex(el, prefix, ndx) {
+    var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+    var replacement = prefix + '-' + ndx + '-';
+    if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
+ replacement));
+    if (el.id) el.id = el.id.replace(id_regex, replacement);
+    if (el.product) el.product = el.product.replace(id_regex, replacement);
+    if (el.barcode) el.barcode = el.barcode.replace(id_regex, replacement);
+    if (el.price) el.price = el.price.replace(id_regex, replacement);
+    if (el.quantity) el.quantity = el.quantity.replace(id_regex, replacement);
+    if (el.bill) el.bill = el.bill.replace(id_regex, replacement);
+  }
+
+  // //Calculate both inputs value on the fly
+  //   $('.calculate').keyup(function () {
+  //       var this_div = $(this).parent().parent();
+  //       // console.log(this_div);
+
+  //       // console.log(this_div.children().children('#id_form-0-cost').val());
+  //       var Tot = parseFloat(this_div.children().children('#id_form-0-cost').val()) *
+  //        parseFloat(this_div.children().children('#id_form-0-quantity').val() );
+  //        this_div.children().children('#id_form-0-bill').val(Tot.toFixed(2));
+
+  //        var total_sum_a = 0;
+  //       $('.item').each(function(){
+  //           total_sum_a += parseFloat(($(this).children().children().children().children('#id_form-0-bill').val()));
+  //           // console.log(total_sum_a);
+  //           $("#id_totalBill").val(total_sum_a.toFixed(2));
+  //           // console.log(total_sum_a) 
+  //           var Total = total_sum_a - parseFloat($('#id_discount').val());
+  //           $("#id_totalBill").val(Total.toFixed(2));
+  //           // console.log(Total)
+  //       });
+
+  //   });
+  //   //Clear both inputs first time when user focus on each inputs and clear value 00
+  //   // $('.calculate').focus(function (event) {
+  //   //     $(this).val("").unbind(event);
+  //   // });
+
+  function deleteForm(btn, prefix) {
+    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+
+    if (formCount > 1) {
+      // Delete the item/form
+      $(btn).parents('.item').remove();
+
+      var forms = $('.item'); // Get all the forms
+
+      // Update the total number of forms (1 less than before)
+      $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+
+      var i = 0;
+      // Go through the forms and set their indices, names and IDs
+      for (formCount = forms.length; i < formCount; i++) {
+        $(forms.get(i)).children().children().each(function() {
+          updateElementIndex(this, prefix, i);
+        });
+      }
+
+    } // End if
+    else {
+        alert("You have to enter at least one item!");
+    }
+    return false;
+  }
+
+
+  function addForm(btn, prefix) {
+    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+
+    // You can only submit a maximum of 10 todo items 
+    if (formCount < 10) {
+      // Clone a form (without event handlers) from the first form
+      var row = $(".item:first").clone(false).get(0);
+      // Insert it after the last form
+      $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
+      
+      // Remove the bits we don't want in the new row/form
+      // e.g. error messages
+      $(".errorlist", row).remove();
+      $(row).children().children().removeClass('error');
+      // console.log($(row).children().children());
+    
+      // Relabel/rename all the relevant bits
+      $(row).children().children().children().children().each(function() {
+        // console.log($(row).children().children().children().children());
+        updateElementIndex(this, prefix, formCount);
+        if ( $(this).attr('type') == 'text')
+          $(this).val('');
+        if ($(this).attr('type') == 'number')
+          $(this).val('0');
+        // console.log($(row).children().children().children().children());
+      });
+      
+    //   //Calculate both inputs value on the fly
+    // $('.calculate').keyup(function (prefix) {
+    //     var this_div = $(this).parent().parent();
+    //     // console.log(this_div);
+
+    //     console.log(parseInt(this_div.children().children('#id_form-1-cost').val()));
+    //     var Tot = parseFloat(this_div.children().children('#id_' + prefix + '-cost').val()) *
+    //      parseFloat(this_div.children().children('#id_' + prefix + 'quantity').val() );
+    //      this_div.children().children('#id_' + prefix + 'bill').val(Tot.toFixed(2));
+
+    //      var total_sum_a = 0;
+    //     $('.item').each(function(prefix){
+    //         total_sum_a += parseFloat(($(this).children().children().children().children('#id_' + prefix + 'bill').val()));
+    //         // console.log(total_sum_a);
+    //         $("#id_totalBill").val(total_sum_a.toFixed(2));
+    //         // console.log(total_sum_a) 
+    //         var Total = total_sum_a - parseFloat($('#id_discount').val());
+    //         $("#id_totalBill").val(Total.toFixed(2));
+    //         // console.log(Total)
+    //     });
+
+    // });
+    // //Clear both inputs first time when user focus on each inputs and clear value 00
+    // // $('.calculate').focus(function (event) {
+    // //     $(this).val("").unbind(event);
+    // // });
+
+      // Add an event handler for the delete item/form link 
+      $(row).find('.t-close').click(function() {
+        return deleteForm(this, prefix);
+      });
+
+      // Update the total form count
+      $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1); 
+
+    } // End if
+    else {
+      alert("Sorry, you can only enter a maximum of ten items.");
+    }
+    return false;
+  }
+
+  // Register the click event handlers
+  $("#add").click(function() {
+    return addForm(this, 'form');
+  });
+  
+  $(".t-close").click(function() {
+    return deleteForm(this, 'form');
+  });
+
+
+});
+</script> -->
+</head>
+
+<div class="main">
+
+   <!--  <p>&#187; <a href="{% url 'sale_list' %}">All sales</a> &#187; Add sale</p>
+
+    <h3>Add sale</h3> -->
+
+
+    
+
+    <div class="page-wrapper">
+        
+        {% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+             {% include "cadmin/sidebar.html" %}
+            <!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Dashboard</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href=#>Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                               <li><a class="parent-item" href="{% url 'sale_list' %}">sale</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">Add sale</li>
+                                
+                            </ol>
+                        </div>
+                    </div>
+                     
+                     <!-- start Payment Details -->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card card-box">
+                                <div class="card-head">
+                                    <header>Add sale</header>
+                                    {% if products.count > 0 %}
+{% for product in products %}
+<li><a href="#">{{product.barcode}}</a></li>
+{% endfor %}
+
+{% else %}
+
+<li>None to Show!</li>
+{% endif %}
+                                    <button id = "panel-button2" 
+                                           class = "mdl-button mdl-js-button mdl-button--icon pull-right" 
+                                           data-upgraded = ",MaterialButton">
+                                           <i class = "material-icons">more_vert</i>
+                                        </button>
+                                        <ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                                           data-mdl-for = "panel-button2">
+                                           <li class = "mdl-menu__item"><i class="material-icons">assistant_photo</i>Action</li>
+                                           <li class = "mdl-menu__item"><i class="material-icons">print</i>Another action</li>
+                                           <li class = "mdl-menu__item"><i class="material-icons">favorite</i>Something else here</li>
+                                        </ul>
+                                </div>
+
+                                                    <p>
+                                                        {{ sale_form.non_field_errors }}
+                                                    </p>
+
+                                <div class="card-body" id="bar-parent2">
+                                    <!-- <form action=""> -->
+                                            
+                                          <!-- </form> -->
+                                          
+                                    <form action="#" id="form_sample_2" class="form-horizontal" method="POST">
+                                        <div class="form-body">
+                                             {% csrf_token %}
+                                             {{ sale_form.media }}
+
+                                              <div class="card-body" id="bar-parent2">
+                                    <form action="#" id="form_sample_2" class="form-horizontal" >
+                                        <div class="form-body">
+                                            <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3">Customer
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4" >
+                                                   {{ sale_form.customer.errors }}
+                                                   {{ sale_form.customer }}
+
+                                                </div>
+                                            </div>
+
+                                            <!-- productproduct_formset here -->
+                                            <!--  <p>
+                                        {{ form.non_field_errors }}
+                                            </p>
+                                            {% csrf_token %}
+                                            {{ form.media }} -->
+                                            
+                                            {% csrf_token %}
+                                            {{ sale_product_formset.management_form }}
+                                            {% for form in sale_product_formset.forms %}
+                                            <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3">Product Barcode
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4" >
+                                                   {{form.barcode.errors}}
+                                                   {{form.barcode}}
+
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                            <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3"> 
+                                                </label>
+                                                <div class="col-md-4" >
+                                                <div id="search_results"></div>
+                                                </div>
+                                            </div>
+
+                                            <!-- <div class="form-group row  margin-top-20"> 
+                                                <label class="control-label col-md-1">
+                                                </label> -->
+                                                    <!-- <div class="col-md-12">
+                                                        <h2>Products</h2>
+    {{ sale_product_formset.management_form }}
+    {% for form in sale_product_formset.forms %}
+
+<div id="template" class="item panel panel-info">
+<p>
+<a class="t-close btn-color fa fa-times href="javascript:;"></a>
+<fieldset id="fieldsets">
+<form method = "POST" action = "">
+<div class="row"> 
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;">
+<input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token }}" />
+<label for="id_form-0-product">Product <span style="color: #e02222;" class="required"> * </span></label> {{form.product.errors}}{{form.product}}
+</div>
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;">
+<input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token }}" />
+<label for="id_form-0-barcode">Barcode <span style="color: #e02222;" class="required"> * </span></label> {{form.barcode.errors}}{{form.barcode}}
+</div>
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;"> 
+<label for="id_form-0-price">Price<span style="color: #e02222;" class="required"> * </span></label> {{form.price.errors}}{{form.price}}
+</div> 
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;">
+<label for="id_form-0-quantity">Quantity<span style="color: #e02222;" class="required"> * </span></label> {{form.quantity.errors}}{{form.quantity}}
+</div> 
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;"> 
+<label for="id_form-0-bill">Bill<span style="color: #e02222;" class="required"> * </span></label> {{form.bill.errors}}{{form.bill}}
+</div> 
+</div>
+</form>
+ </fieldset>
+</p>
+</div>
+
+    {% endfor %}
+                                                
+                                                    
+                                                    
+                                                    <div class="form-group">
+                                            <div class="offset-md-3 col-md-9">
+                                                <p><button class="btn btn-success" type="button" name="Submit" id="add" onclick="#">+Add item</button></p>
+                                                
+                                            </div>
+                                        </div>
+
+                                                </div> -->
+<!-- start Payment Details -->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card  card-box">
+                                <div class="card-head">
+                                    <header>Products Details</header>
+                                    <div class="tools">
+                                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
+                                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
+                                       <!--  <a class="t-close btn-color fa fa-times" href="javascript:;"></a> -->
+                                    </div>
+                                </div>
+                                <div class="card-body ">
+                                  <div class="table-wrap">
+                                        <div class="table-responsive">
+        
+                                                    {% if products.count > 0 %}
+                                                    {% for product in products %}
+                                                        {% if forloop.first     %}
+                                                            <table   class="table display product-overview mb-30" id="support_table5">
+                                                                <thead >
+                                                                  <th>Id</th>
+                                                                    <th>Name</th>
+                                                                    <th>Description</th>
+                                                                    <th>Barcode</th>
+                                                                    <th>brand</th>
+                                                                    <th>Color</th>
+                                                                    <!-- <th>Cost</th> -->
+                                                                    <th>Sale Price</th>
+                                                                    <th>Quantity</th>
+                                                                    <th>Bill</th>
+                                                                    <!-- <th>Date</th> -->
+                                                                    <!-- <th>Action</th> -->
+                                                                </tr>
+                                                            </thead>
+                                                        {% endif %}
+                                              
+                                               {% if product.barcode == search_text    %}
+                                                        <tr>
+                                                            <td title="{{ product.id }}">{{ product.id}}</td>
+                                                            <td class="product-name" title="{{ product.name }}">{{   product.name|truncatechars:50 }}</td>
+                                                            <!-- <td>{{ product.category }}</td> -->
+                                                            <!-- {% if request.user.is_superuser %}
+                                                                <td>{{ product.author }}</td>
+                                                            {% endif %} -->
+
+                                                            <td title="{{ product.description }}">{{ product.description}}</td>
+                                                            <td title="{{ product.barcode }}">{{product.barcode_generated }}
+                                                            </td>
+                                                            <td title="{{ product.brand }}">{{ product.brand }}</td>
+                                                            <td title="{{ product.colour }}">{{ product.colour }}</td>
+                                                            <!-- <td title="{{ product.cost }}">{{ product.cost }}</td> -->
+                                                            <td title="{{ product.salePrice }}">{{ product.salePrice }}</td>
+                                                            <td title="{{ product.quantity }}">{{ product.quantity }}</td>
+                                                            <td title="{{ product.bill }}"> {{ product.bill }} </td>
+
+                     <!-- <td title="{{ product.created_at }}">{{ product.created_at|date:"d M Y" }}</td> -->
+                    <!-- <td>
+                        <a href="{% url 'product_update' product.id %}" class="btn btn-tbl-edit btn-xs"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-tbl-delete btn-xs" href= "{% url 'product_delete' product.id %}?next={{ request.get_full_path }}" onclick=" return confirm('Are you sure ?')"><i class="fa fa-trash-o "></i></a>
+                                                            </td> -->
+                                                        </tr>
+                                                        {% endif %}
+                                                        {% if forloop.last %}
+                                                            </table>
+                                                        {% endif %}
+
+                                                    {% empty %}
+                                                        No Products
+                                                    {% endfor %}
+                                                    {% endif %}
+
+                                            </div>
+
+                                            {% if products %}
+
+                                                <!-- <div class="pagination">
+                                                    <p>
+                                                        {% if products.has_previous %}
+                                                            <a href="?page={{ products.previous_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">&lt; Prev</a> |
+                                                        {% endif %}
+
+                                                        {% if products.has_next %}
+                                                            <a href="?page={{ products.next_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">Next &gt;</a>
+                                                        {% endif %}
+
+                                                        <span>Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+                                                    </p>
+                                                </div> -->
+
+                                            {% endif %}
+                                           {% if messages %}
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+                                                
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                    
+                    <!-- end Payment Details -->                                                
+                                            
+
+                                                <!-- <p>
+                                                    <button class="btn btn-success" type="button" name="Submit" onclick="Add();">+Add Product</button>
+                                                </p>
+                                                </div>
+                                                </div> -->
+
+                                                <!-- <div class="form-group">
+                                                    <div class="offset-md-3 col-md-9">
+                                                <input class="btn btn-info" type = 'submit' value="Submit"/>
+                                                </div>
+                                                </div> -->
+                                                <!-- <div class="form-group">
+                                                </div> -->
+                                            
+                                            
+                                        
+                                            <!-- </div>
+                                        
+                                            </div> -->
+                                        
+                                            <!-- to there -->
+
+                                            <div class="form-group row">
+                                                <label class="control-label col-md-0">Total Bill
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-2">
+                                                     {{ sale_form.totalBill.errors }}
+                                                     {{ sale_form.totalBill }}
+                                                </div>
+                                                <label class="control-label col-md-0">Discount
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-2">
+                                                     {{ sale_form.discount.errors }}
+                                                     {{ sale_form.discount }}
+                                                </div>
+                                                <label class="control-label col-md-0">ReceivedAmount
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-2">
+                                                    {{ sale_form.receivedAmount.errors }}
+                                                    {{ sale_form.receivedAmount }}
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- <div class="form-group row">
+                                                <label class="control-label col-md-3">Discount
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                     {{product_formset.discount.errors }}
+                                                     {{product_formset.discount }}
+                                                </div>
+                                            </div> -->                                   
+                                        
+                                        </div>
+                                         <div class="form-group">
+                                            <div class="offset-md-3 col-md-9">
+                                                <button type="submit" class="btn btn-info">Submit</button>
+                                                <!-- <button type="button" class="btn btn-default">Cancel</button> -->
+                                            </div>
+                                        </div>
+                                    </form>
+                                    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+<div id="out"></div>
+<!-- <div id="go">{{search_text}}</div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+
+
+ {% endblock %}
+
+

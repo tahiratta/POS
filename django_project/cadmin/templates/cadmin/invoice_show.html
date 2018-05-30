@@ -1,0 +1,189 @@
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+    
+{% endblock %}
+
+{% block main %}
+{% load static %}
+
+{% load subtractify %}
+    <div class="page-wrapper">
+		{% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+            {% include "cadmin/sidebar.html" %}
+
+			<!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Invoice</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href="index.html">Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                <li><a class="parent-item" href="#">Extra</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">Invoice</li>
+                            </ol>
+                        </div>
+                    </div>
+	                   <div class="row">
+	                    <div class="col-md-12">
+	                        <div class="white-box">
+	                            <!-- <h3><b>INVOICE</b> <span class="pull-right">#</span></h3> -->
+	                            <hr>
+	                            <div class="row">
+	                                <div class="col-md-12">
+										<div class="pull-left">
+											<address>
+												<img src="{% static 'assets/img/invoice_logo.png' %}" alt="logo" class="logo-default" />
+												<p class="text-muted m-l-5">
+													Point of Sale <br>System <!-- Opp. Town Hall, <br>
+													Sardar Patel Road, <br> Ahmedabad - 380015 -->
+                                                    
+												</p>
+											</address>
+										</div>
+										<div class="pull-right text-right">
+											<address>
+												<p class="addr-font-h3">To,</p>
+												{% for customer in customers %}
+                                                {% if customer_id == customer.id %}
+												<p class="font-bold addr-font-h4">{{ customer.name }}</p>
+
+												<p class="text-muted m-l-30">
+													{{ customer.address }}
+												</p>
+												
+												
+
+												
+												<p class="m-t-30">
+													<b>Invoice Date :</b> <i class="fa fa-calendar"></i> {{ customer.created_at }}
+												</p>
+                                                {% endif %}
+												{% endfor %}
+											</address>
+										</div>
+									</div>
+	                                <div class="col-md-12">
+	                                    <div class="table-responsive m-t-40">
+	                                            {% for customer in customers %}
+                                                
+                                                                {% if forloop.first     %}
+                                                                   <table   class="table table-hover" id="support_table5">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Id</th>
+                                                                            <th>Product Name</th>
+                                                                            <th>Unit Price</th>
+                                                                            <th>Quantity</th>
+                                                                            <!-- <th>Discount</th> -->
+                                                                            <th>Total Price</th>
+                                                                            <!-- <th>Balance</th> -->
+                                                                            <th>Date</th>
+                                                                            <!-- <th>Action</th> -->
+                                                                        </tr>
+                                                                    </thead>
+                                                                {% endif %}
+
+                
+                    {% if customer_id == customer.id %}                                            
+                    {% for product in products %}
+                    {% for sale in sales %}
+                    
+                                                    
+                    {% if customer.id == sale.customer.id %}
+                    {% for sale_product in sale_products %}
+                    {% if sale_product.sale.id == sale.id %}
+                    {% if sale_product.product.id == product.id %}
+                    <tr>
+                    <td title="{{ customer.id }}">{{ customer.id }}</td>
+                    <td class="customer-name" title="{{ product.name }}">{{ product.name|truncatechars:50 }}</td>
+                    <td title="{{ product.cost }}">{{ product.cost }}</td>
+                    <td title="{{ product.quantity }}">{{ product.quantity }}</td>
+                    
+
+                    <!-- <td title="{{ sale.discount }}">{{ sale.discount }}</td> -->
+                    <td title="{{ sale.bill }}">{{ product.bill }}</td>
+                    
+
+                    <!-- {% if sale.product.id == product.id %}
+                    <td title="{{ sale.bill }}">{{ product.bill }}</td>
+                    {% endif %} -->
+
+                    <!-- {% for customer_ledger in customer_ledgers %}
+                    {% if sale.customer.id == customer_ledger.customer.id %}   
+                    <td title="{{ sale.balance }}">
+                    {{sale.totalBill|subtract:sale.discount|add:sale.receivedAmount}}</td>  
+                    {% endif %}                
+                    {% endfor %} -->
+                    <td title="{{ customer.created_at }}">{{ customer.created_at|date:"d M Y" }}</td>
+                    <!-- <td><a href="{% url 'customer_update' customer.id %}" class="btn btn-tbl-edit btn-xs"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-tbl-delete btn-xs" href= "{% url 'customer_delete' customer.id %}?next={{ request.get_full_path }}" onclick=" return confirm('Are you sure ?')"><i class="fa fa-trash-o "></i></a>
+                        </td> -->
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    </tr>
+
+                    {% endfor %}
+                    {% endfor %}
+
+                    {% endif %} 
+                  
+                    <!-- <td>{{ customer.category }}</td> -->
+                    <!-- {% if request.user.is_superuser %}
+                        <td>{{ customer.author }}</td>
+                    {% endif %} -->
+
+                    
+                        
+                    
+                   
+                {% if forloop.last %}
+                    </table>
+                     <div class="col-md-12">
+                    <div class="pull-right m-t-30 text-right">   
+                                            <p>Total Discount : {{total_discount}} </p>
+                                            <p>Total Balance : {{total_balance}} </p>
+                                            <hr>
+                                            <h3><b>Total Bill :</b> {{total_amount}}</h3> 
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <hr>
+                                        <div class="text-right">
+                                            <button class="btn btn-danger" type="submit"> Proceed to payment </button>
+                                            <button onclick="javascript:window.print();" class="btn btn-default btn-outline" type="button"> <span><i class="fa fa-print"></i> Print</span> </button>
+                                        </div>
+                                    </div>
+                {% endif %}
+
+                    
+                   
+                                    
+                                    
+                    
+                
+            {% empty %}
+                No Invoices 
+            {% endfor %}
+
+    </div>
+	                                    </div>
+	                                </div>
+	                                
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+                </div>
+            </div>
+            <!-- end page content -->
+        </div>
+        <!-- end page container -->
+  {% endblock %}      

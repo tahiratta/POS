@@ -1,0 +1,177 @@
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+    All Supplier Ledger - {{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+    <div class="main">
+
+       <!--  <p>&#187; <a href="{% url 'supplier_ledger_list' %}">All Supplier Ledger</a> </p>
+
+        <p class="button"><a href="{% url 'supplier_ledger_add' %}">Add Supplier Ledger &raquo;</a></p> -->
+
+        
+
+       <!--  <p class="count">Total supplier_ledger: {{ supplier_ledgers.paginator.count }}</p> -->
+
+       <div class="page-wrapper">
+        
+        {% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+             {% include "cadmin/sidebar.html" %}
+            <!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Dashboard</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href="{% url 'index' %}">Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">Supplier Ledger</li>
+                            </ol>
+                        </div>
+                    </div>
+                     
+                   <!-- start widget -->
+                    <div class="state-overview">
+                     
+                        <div class="row">
+                          
+                            
+                            <!-- /.col -->
+                            <div class="col-xl-3 col-md-6 col-12">
+                              <div class="info-box bg-blue">
+                                <span class="info-box-icon push-bottom"><i class="material-icons">card_travel</i></span>
+                                <div class="info-box-content">
+                                  <span class="info-box-text">Total</span>
+                                  <span class="info-box-text">Supplier Ledger</span>
+                                  <div class="progress">
+                                    <div class="progress-bar width-100"></div>
+                                  </div>
+                                  <span class="progress-description">
+                                        {{ supplier_ledgers.paginator.count }}
+                                      </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                              </div>
+                              <!-- /.info-box -->
+                            </div>
+                            
+                     
+                        </div>
+                             </div>
+
+                    <ul class="nav nav-pills nav-pills-rose">
+                       <button type="button" class="btn btn-circle btn-success" onclick="window.location.href='{% url 'supplier_ledger_add' %}'"><i class="fa fa-plus"></i> Add Supplier Ledger </button>
+                       
+                    </ul>
+                     <!-- start Payment Details -->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card  card-box">
+                                <div class="card-head">
+                                    <header>Supplier Ledger Details</header>
+                                    <div class="tools">
+                                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
+                                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
+                                        <!-- <a class="t-close btn-color fa fa-times" href="javascript:;"></a> -->
+                                    </div>
+                                </div>
+                                <div class="card-body ">
+                                    <form method='GET' action = ''>
+                                        <input type='text' name='q' placeholder='Search Supplier Ledgers' value='{{request.GET.q}}' />
+                                        <input type="submit" value="Search"/>
+                                    </form><br>
+                                  <div class="table-wrap">
+                                        <div class="table-responsive">
+                                                
+                                                    {% for supplier_ledger in supplier_ledgers %}
+                                                        {% if forloop.first     %}
+                                                            <table   class="table display product-overview mb-30" id="support_table5">
+                                                                                        <tr>
+                                                                                            <tr>
+                                                                                                <th>Id</th>
+                                                                                                <th>Supplier</th>
+                                                                                                <th>Amount Paid</th>
+                                                                                                <th>Date</th>
+                                                                                                <th>Action</th>
+                                                                                            </tr>
+																							</thead>
+                                                                                    {% endif %}
+
+                <tr>
+                    <!-- <td class="supplier_ledger-name" title="{{ supplier_ledger.name }}">{{ supplier_ledger.name|truncatechars:50 }}</td> -->
+                    <!-- <td>{{ supplier.category }}</td> -->
+                    <!-- {% if request.user.is_superuser %}
+                        <td>{{ supplier_ledger.author }}</td>
+                    {% endif %} -->
+                    <td title="{{ supplier_ledger.id }}">{{ supplier_ledger.id}}</td>
+                    <td title="{{ supplier_ledger.supplier }}">{{ supplier_ledger.supplier}}</td>
+                    <td title="{{ supplier_ledger.amount_paid }}">{{ supplier_ledger.amount_paid }}</td>
+                    <!-- <td title="{{ supplier_ledger.brandName }}">{{ supplier_ledger.brandName }}</td> -->
+
+                    <td title="{{ supplier_ledger.created_at }}">{{ supplier_ledger.created_at|date:"d M Y" }}</td>
+                    <td>
+                        <a href="{% url 'supplier_ledger_update' supplier_ledger.id %}" class="btn btn-tbl-edit btn-xs"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-tbl-delete btn-xs" href= "{% url 'supplier_ledger_delete' supplier_ledger.id %}?next={{ request.get_full_path }}" onclick=" return confirm('Are you sure ?')"><i class="fa fa-trash-o "></i></a>
+                    </td>
+                </tr>
+
+                {% if forloop.last %}
+                    </table>
+                {% endif %}
+
+            {% empty %}
+                No Suppliers
+            {% endfor %}
+
+    </div>
+
+    {% if supplier_ledgers %}
+
+        <div class="pagination">
+            <p>
+                {% if supplier_ledgers.has_previous %}
+                    <a href="?page={{ supplier_ledgers.previous_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">&lt; Prev</a> |
+                {% endif %}
+
+                {% if supplier_ledgers.has_next %}
+                    <a href="?page={{ supplier_ledgers.next_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">Next &gt;</a>
+                {% endif %}
+
+                <span>Page {{ supplier_ledgers.number }} of {{ supplier_ledgers.paginator.num_pages }}</span>
+            </p>
+        </div>
+
+    {% endif %}
+    {% if messages %}
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end Payment Details -->
+                  
+            <!-- end page content -->
+            
+        </div>
+        <!-- end page container -->
+        
+    </div>
+
+
+
+                                       
+
+{% endblock %}

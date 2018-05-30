@@ -1,0 +1,42 @@
+{% extends "cadmin/base.html" %}
+
+{% block content %}
+
+    <!-- <div class="header">
+        <div class="section-inner clearfix">
+            <h2 class="title"><a href="{% url 'supplier_list' %}">Point of Sale - Admin Panel</a></h2>
+            <div class="user-welcome">
+                <p>Welcome {{ request.user.username }}</p>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="content">
+        <div class="section-inner">
+            <!-- <div class="sidebar">
+                <ul>
+                    <li><a href="{% url 'supplier_list' %}">Supplier</a></li>
+                    <li><a href="{% url 'supplier_ledger_list' %}">Supplier Ledger</a></li>
+                    <li><a href="{% url 'product_list' %}">Product</a></li>
+                    <li><a href="{% url 'purchase_list' %}">Purchase</a></li>
+                    <li><a href="{% url 'customer_list' %}">Customer</a></li>
+                    <li><a href="{% url 'sale_list' %}">Sale</a></li>
+                    <li><a href="{% url 'customer_ledger_list' %}">Customer Ledger</a></li>
+
+                    <li><a href="{% url 'account_info' %}">Account Info</a></li>
+                    <li><a href="{% url 'password_change' %}">Change Password</a></li>
+                    <li><a target="_blank" href="{{ request.scheme }}://{{ request.get_host }}">View Site</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li></li>
+                </ul>
+            </div> -->
+
+            {% block main %}
+
+            {% endblock %}
+
+        </div>
+
+    </div>
+
+{% endblock %}

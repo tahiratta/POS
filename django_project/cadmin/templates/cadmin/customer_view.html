@@ -1,0 +1,345 @@
+
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block main %}
+
+
+{%load static%}
+   <div class="page-wrapper">
+        
+        {% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+             {% include "cadmin/sidebar.html" %}
+            <!-- start page content -->
+             <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">customer Profile</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href="{% url 'index' %}">Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                 <li><a class="parent-item" href="{% url 'customer_list' %}">customer</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">customer Profile</li>
+                            </ol>
+                        </div>
+                    </div>
+                     
+                   <!-- start widget -->
+                    <div class="row">
+                        <div class="col-md-12">
+                             <!-- BEGIN PROFILE SIDEBAR -->
+                            <div class="profile-sidebar">
+                                <div class="card card-topline-aqua">
+                                    <div class="card-body no-padding height-9">
+                                        <div class="row">
+                                            <div class="profile-userpic">
+                                                 <img src="{% static 'assets/img/dp.jpg' %}" class="img-responsive" alt=""> </div>
+                                        </div>
+                                        <div class="profile-usertitle">
+                                            <div class="profile-usertitle-name"> {{ request.user.username }} </div>
+                                          
+                                        </div>
+                                        {% for customer in customers %}
+                                        {% if customer_id == customer.id %}
+                                        <ul class="list-group list-group-unbordered">
+                                            <li class="list-group-item">
+                                                <b>UserName</b> <a class="pull-right">{{ customer.name }}</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Contact</b> <a class="pull-right">{{ customer.contact }}</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Email</b> <a class="pull-right">{{ customer.email }}</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Address</b> <a class="pull-right">{{ customer.address }}</a>
+                                            </li>
+                                        </ul>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <!-- END SIDEBAR USER TITLE -->
+                                        
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-head card-topline-aqua">
+                                        <header>Business Detail</header>
+                                    </div>
+                                    <div class="card-body no-padding height-9">
+                                    {% for customer in customers %}
+                                   
+                                    {% if customer_id == customer.id %}                                            
+                                    
+                    
+                                                    
+                                    
+                                        
+                                        <div class="row list-separated profile-stat">
+                                            <div class="col-md-4 col-sm-4 col-6">
+                                                <div class="uppercase profile-stat-title"> 
+                                                                      
+                                                    <td title="{{sale.totalbill}}">{{total_business}} </td>  
+                                                    
+                                                </div>
+                                                <div class="uppercase profile-stat-text"> Total Business </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-4 col-6">
+                                                <div class="uppercase profile-stat-title"> {{total_balance}} </div>
+                                                <div class="uppercase profile-stat-text"> Balance </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-4 col-6">
+                                                <div class="uppercase profile-stat-title"> {{total_amountReceived}} </div>
+                                                <div class="uppercase profile-stat-text"> Received </div>
+                                            </div>
+                                        </div>
+                                      
+
+                                        {% endif %}
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div>
+                               
+                                
+                            </div>
+                            <!-- END BEGIN PROFILE SIDEBAR -->
+                            <!-- BEGIN PROFILE CONTENT -->
+                            <div class="profile-content">
+                                <div class="row">
+                                    <div class="profile-tab-box">
+                                        <div class="p-l-20">
+                                            <ul class="nav ">
+                                                <li class="nav-item tab-all"><a
+                                                    class="nav-link active show" href="#tab1" data-toggle="tab">Products</a></li>
+                                                <li class="nav-item tab-all p-l-20"><a class="nav-link"
+                                                    href="#tab2" data-toggle="tab">Payment</a></li>
+                                               
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="white-box">
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                    <div class="tab-pane active fontawesome-demo" id="tab1">
+                                                        
+                                <div class="card-body ">
+                                  <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            {% for product in products %}
+                                                        {% if forloop.first     %}
+                                            <table class="table display product-overview mb-30" id="support_table5">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Id</th>
+                                                                    <th>Name</th>
+                                                                    <th>Description</th>
+                                                                    <th>Barcode</th>
+                                                                    <th>brand</th>
+                                                                    <th>Color</th>
+                                                                    <th>Cost</th>
+                                                                    <th>Sale Price</th>
+                                                                    <th>Quantity</th>
+                                                                    <th>Bill</th>
+                                                                    <th>Date</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                 {% endif %}
+                                                <tbody>
+                                                    {% for customer in customers %}
+                                                    {% if customer_id == customer.id %}
+                                                    {% for sale in sales %}
+                                                    
+                                                                                    
+                                                    {% if customer.id == sale.customer.id %}
+                                                    {% for sale_product in sale_products %}
+                                                    {% if sale_product.sale.id == sale.id %}
+                                                    {% if sale_product.product.id == product.id %}
+                                                     <tr>
+                                                            <td title="{{ product.id }}">{{ product.id}}</td>
+                                                            <td class="product-name" title="{{ product.name }}">{{   product.name|truncatechars:50 }}</td>
+                                                            <!-- <td>{{ product.category }}</td> -->
+                                                            <!-- {% if request.user.is_superuser %}
+                                                                <td>{{ product.author }}</td>
+                                                            {% endif %} -->
+
+                                                            <td title="{{ product.description }}">{{ product.description}}</td>
+                                                            <td title="{{ product.barcode }}">{{ product.barcode_generated }}</td>
+                                                            <td title="{{ product.brand }}">{{ product.brand }}</td>
+                                                            <td title="{{ product.colour }}">{{ product.colour }}</td>
+                                                            <td title="{{ product.cost }}">{{ product.cost }}</td>
+                                                            <td title="{{ product.salePrice }}">{{ product.salePrice }}</td>
+                                                            <td title="{{ product.quantity }}">{{ product.quantity }}</td>
+                                                            <td title="{{ product.bill }}"> {{ product.bill }} </td>
+                                                    }
+
+                     <td title="{{ product.created_at }}">{{ product.created_at|date:"d M Y" }}</td>
+                                                            {% endif %}
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                            {% endif %}
+                                                        </tr>
+                                                    {% endfor %}
+                                                    
+
+                                                    {% endif %} 
+                                                    {% endfor %}
+                                                </tbody>
+
+                                            {% if forloop.last %}
+                                                            </table>
+                                                        {% endif %}
+
+                                                    {% empty %}
+                                                        No Products
+                                                    {% endfor %}
+                                        </div>
+                                        {% if products %}
+
+                                                <div class="pagination">
+                                                    <p>
+                                                        {% if products.has_previous %}
+                                                            <a href="?page={{ products.previous_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">&lt; Prev</a> |
+                                                        {% endif %}
+
+                                                        {% if products.has_next %}
+                                                            <a href="?page={{ products.next_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">Next &gt;</a>
+                                                        {% endif %}
+
+                                                        <span>Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+                                                    </p>
+                                                </div>
+
+                                            {% endif %}
+    {% if messages %}
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+                                    </div>  
+                                     <div class="clearfix"></div>
+                                        <hr>
+                                        <div class="text-right">
+                                            
+                                            <button onclick="javascript:window.print();" class="btn btn-default btn-outline" type="button"> <span><i class="fa fa-print"></i> Print</span> </button>
+                                        </div>
+                                </div>
+                            </div>
+
+                                                    <div class="tab-pane" id="tab2">
+                                                        <div class="container-fluid">
+                                                            <div class="row">
+                                                                
+                                                               <div class="col-md-12">
+                                        <div class="table-responsive m-t-40">
+                                            {% for product in products %}
+                                                        {% if forloop.first     %}
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">#</th>
+                                                        <!-- <th class="text-center">Date</th> -->
+                                                        <th class="text-center">Descriptions</th>
+                                                        <th class="text-center">Cost</th>
+                                                        <th class="text-center">Sale Price</th>
+                                                        <th class="text-center">Quantity</th>
+                                                        <th class="text-right">Bill</th>
+                                                    </tr>
+                                                </thead>
+                                                {% endif %}
+                                                <tbody>
+                                                    <tr>
+                                                    {% for customer in customers %}
+                                                    {% if customer_id == customer.id %}
+                                                    {% for sale in sales %}
+                                                    
+                                                                                    
+                                                    {% if customer.id == sale.customer.id %}
+                                                    {% for sale_product in sale_products %}
+                                                    {% if sale_product.sale.id == sale.id %} 
+                                                    {% if sale_product.product.id == product.id %}
+                                                        <td title="{{ product.id }}">{{ product.id}}</td>
+                                                        <td title="{{ product.description }}">{{ product.description}}</td>
+                                                        <td title="{{ product.cost }}">{{ product.cost }}</td>
+                                                            <td title="{{ product.salePrice }}">{{ product.salePrice }}</td>
+                                                            <td title="{{ product.quantity }}">{{ product.quantity }}</td>
+                                                            <td title="{{ product.bill }}"> {{ product.bill }} </td>
+                                                            {% endif %}
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                            {% endif %}
+
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+
+                                                    {% endif %} 
+                                                    {% endfor %}
+
+                                                </tbody>
+                                            {% if forloop.last %}
+                                                            </table>
+                                                        {% endif %}
+
+                                                    {% empty %}
+                                                        No Payments
+                                                    {% endfor %}
+                                        </div>
+                                        {% if products %}
+
+                                                <div class="pagination">
+                                                    <p>
+                                                        {% if products.has_previous %}
+                                                            <a href="?page={{ products.previous_page_number }}">&lt; Prev</a> |
+                                                        {% endif %}
+
+                                                        {% if products.has_next %}
+                                                            <a href="?page={{ products.next_page_number }}">Next &gt;</a>
+                                                        {% endif %}
+
+                                                        <span>Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+                                                    </p>
+                                                </div>
+
+                                            {% endif %}
+    {% if messages %}
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="pull-right m-t-30 text-right">
+                                            
+                                            <hr>
+                                            <h3><b>Total :</b> {{ total_payment }}</h3> </div>
+                                        
+                                    </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                     </div>
+                                </div>
+                                <!-- END PROFILE CONTENT -->
+                            </div>
+                        </div>
+                    </div>
+                <!-- end page content -->
+            
+        </div>
+        <!-- end page container -->
+        </div>
+          </div>
+    </div>
+{% endblock %}

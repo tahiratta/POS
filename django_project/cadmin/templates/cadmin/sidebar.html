@@ -1,0 +1,154 @@
+{% load static %}
+<!-- start sidebar menu -->
+            <div class="sidebar-container">
+                <div class="sidemenu-container navbar-collapse collapse fixed-menu">
+                    <div id="remove-scroll">
+                        <ul class="sidemenu page-header-fixed p-t-20" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                            <li class="sidebar-toggler-wrapper hide">
+                                <div class="sidebar-toggler">
+                                    <span></span>
+                                </div>
+                            </li>
+                            <li class="sidebar-user-panel">
+                                <div class="user-panel">
+                                    <div class="row">
+                                            <div class="sidebar-userpic">
+                                                <img src="{% static 'assets/img/dp.jpg' %}" class="img-responsive" alt=""> </div>
+                                        </div>
+                                        <div class="profile-usertitle">
+                                            <div class="sidebar-userpic-name"> {{ request.user.username }} </div>
+                                            <div class="profile-usertitle-job"> Manager </div>
+                                        </div>
+                                        <div class="sidebar-userpic-btn">
+                                            <span style="align-items: center;"><a class="tooltips" href="{% url 'password_change' %}" data-placement="top" data-original-title="Profile">
+                                                <i class="material-icons">person_outline</i>
+                                            </a>
+                                          
+                                            <a class="tooltips" href="{% url 'logout' %}" data-placement="top" data-original-title="Logout">
+                                                <i class="material-icons">input</i>
+                                            </a>
+                                        </span>
+                                        </div>
+                                </div>
+                            </li>
+                             
+                            <li class="nav-item ">
+                              
+                                <a href="{% url 'index' %}" class="nav-link nav-toggle"> <i class="material-icons">dashboard</i>
+                                    <span class="title">Home</span> 
+                                   
+                                </a>
+                            </li>
+                            <li class="nav-item start ">
+                                <a href="#" class="nav-link nav-toggle">
+                                    <i class="material-icons">people_outline</i>
+                                    <span class="title">Supplier</span>
+                                     
+                                    <span class="arrow open"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item active">
+                                        <a href="{% url 'supplier_list' %}" class="nav-link ">
+                                            <span class="title">Supplier</span>
+                                            
+                                            
+                                        </a>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a href="{% url 'supplier_ledger_list' %}" class="nav-link ">
+                                            <span class="title">Supplier Ledger</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                             <li class="nav-item start ">
+                                <a href="#" class="nav-link nav-toggle">
+                                    <i class="fa fa-cubes"></i>
+                                    <span class="title">Product</span>
+                                     
+                                    <span class="arrow open"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item active">
+                                        <a href="{% url 'product_list' %}" class="nav-link ">
+                                            <span class="title">Product</span>
+                                            
+                                            
+                                        </a>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a href="{% url 'product_view' %}" class="nav-link ">
+                                            <span class="title">Product View</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item start ">
+                                <a href="#" class="nav-link nav-toggle">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span class="title">Purchase</span>
+                                     
+                                    <span class="arrow open"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item active">
+                                        <a href="{% url 'purchase_list' %}" class="nav-link ">
+                                            <span class="title">Purchase</span>
+                                            
+                                            
+                                        </a>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a href="{% url 'purchase_view' %}" class="nav-link ">
+                                            <span class="title">Purchase View</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item start ">
+                                <a href="#" class="nav-link nav-toggle">
+                                    <i class="fa fa-dollar (alias)"></i>
+                                    <span class="title">Sale</span>
+                                     
+                                    <span class="arrow open"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item active">
+                                        <a href="{% url 'sale_list' %}" class="nav-link ">
+                                            <span class="title">Sale</span>
+                                            
+                                            
+                                        </a>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a href="{% url 'sale_view' %}" class="nav-link ">
+                                            <span class="title">Sale View</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link nav-toggle">
+                                    <i class="material-icons">dashboard</i>
+                                    <span class="title">Customer</span>
+                                    <span class="arrow open"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="{% url 'customer_list' %}" class="nav-link ">
+                                            <span class="title">Customer</span>
+                                            
+                                        </a>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <a href="{% url 'customer_ledger_list' %}" class="nav-link ">
+                                            <span class="title">Customer Ledger</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                    </div>
+                </div>
+            </div>
+            <!-- end sidebar menu -->

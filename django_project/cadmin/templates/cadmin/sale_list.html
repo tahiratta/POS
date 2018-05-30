@@ -1,0 +1,190 @@
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+    All Sale - {{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+{% load subtractify %}
+    <div class="main">
+
+      <!--   <p>&#187; <a href="{% url 'sale_list' %}">All Sale</a> </p>
+
+        <p class="button"><a href="{% url 'sale_add' %}">Add Sale &raquo;</a></p>
+ -->
+        
+
+<!--         <p class="count">Total sale: {{ sales.paginator.count }}</p> -->
+
+ <div class="page-wrapper">
+        
+        {% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+             {% include "cadmin/sidebar.html" %}
+            <!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Dashboard</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href="{% url 'index' %}">Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">Sale</li>
+                            </ol>
+                        </div>
+                    </div>
+                     
+                   <!-- start widget -->
+                    <div class="state-overview">
+                     
+                        <div class="row">
+                          
+                            
+                            <!-- /.col -->
+                            <div class="col-xl-3 col-md-6 col-12">
+                              <div class="info-box bg-blue">
+                                <span class="info-box-icon push-bottom"><i class="material-icons">card_travel</i></span>
+                                <div class="info-box-content">
+                                  <span class="info-box-text">Total</span>
+                                  <span class="info-box-text">Sale</span>
+                                  <div class="progress">
+                                    <div class="progress-bar width-100"></div>
+                                  </div>
+                                  <span class="progress-description">
+                                        {{ sales.paginator.count }}
+                                      </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                              </div>
+                              <!-- /.info-box -->
+                            </div>
+                            
+                     
+                        </div>
+                             </div>
+
+                    <ul class="nav nav-pills nav-pills-rose">
+                        <button type="button" class="btn btn-circle btn-success"><i class="fa fa-plus"></i><a href="{% url 'sale_add' %}" style="color:white"> Add Sale </a></button>
+                       
+                    </ul>
+                     <!-- start Payment Details -->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card  card-box">
+                                <div class="card-head">
+                                    <header>Sales Details</header>
+                                    <div class="tools">
+                                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
+                                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
+                                        <!-- <a class="t-close btn-color fa fa-times" href="javascript:;"></a> -->
+                                    </div>
+                                </div>
+                                <div class="card-body ">
+                                    <form method='GET' action = ''>
+                                        <input type='text' name='q' placeholder='Search Sales' value='{{request.GET.q}}' />
+                                        <input type="submit" value="Search"/>
+                                    </form><br>
+                                  <div class="table-wrap">
+                                        <div class="table-responsive">
+        
+                                                            {% for sale in sales %}
+                                                                {% if forloop.first %}
+                                                                <table   class="table display product-overview mb-30" id="support_table5">
+                                                                <thead >
+                                                                   
+                                                                        <tr>
+                                                                            <th>Id</th>
+                                                                            <th>Customer</th>
+                                                                            <th>Total Bill</th>
+                                                                            <th>Discount</th>
+                                                                            <th>Amount Received</th>
+                                                                            <th>Balance</th>
+                                                                            <th>Date</th>
+                                                                            <!-- <th>Action</th> -->
+                                                                        </tr>
+                                                                    </thead>
+                                                                {% endif %}
+                
+                <tr>
+                    <!-- <td class="sale-name" title="{{ sale.name }}">{{ sale.name|truncatechars:50 }}</td> -->
+                    <!-- <td>{{ supplier.category }}</td> -->
+                    <td title="{{ sale.id }}">{{ sale.id}}</td>
+                    <td title="{{ sale.customer }}">{{ sale.customer}}</td>
+                    <!-- {% if request.user.is_superuser %}
+                        <td>{{ sale.author }}</td>
+                    {% endif %} -->
+                     
+                    <td title="{{ sale.totalBill }}">{{ sale.totalBill }}</td>
+
+                    <td title="{{ sale.discount }}">{{ sale.discount }}</td>
+
+                    <td title="{{ sale.receivedAmount }}">{{ sale.receivedAmount }}</td>
+
+                    <td title="{{ sale.balance }}">{{sale.totalBill|subtract:sale.discount|add:sale.receivedAmount}}</td>
+
+                    <td title="{{ sale.created_at }}">{{ sale.created_at|date:"d M Y" }}</td>
+                    <!-- <td>
+                       <a href="{% url 'sale_update' sale.id %}" class="btn btn-tbl-edit btn-xs"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-tbl-delete btn-xs" href= "{% url 'sale_delete' sale.id %}?next={{ request.get_full_path }}" onclick=" return confirm('Are you sure ?')"><i class="fa fa-trash-o "></i></a>
+                    </td> -->
+                </tr>
+
+                {% if forloop.last %}
+                    </table>
+                {% endif %}
+
+            {% empty %}
+                No Sales
+            {% endfor %}
+
+    </div>
+
+    {% if sales %}
+
+        <div class="pagination">
+            <p>
+                {% if sales.has_previous %}
+                    <a href="?page={{ sales.previous_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">&lt; Prev</a> |
+                {% endif %}
+
+                {% if sales.has_next %}
+                    <a href="?page={{ sales.next_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">Next &gt;</a>
+                {% endif %}
+
+                <span>Page {{ sales.number }} of {{ sales.paginator.num_pages }}</span>
+            </p>
+        </div>
+
+    {% endif %}
+{% if messages %}
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+                                                
+                                                
+                                            
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end Payment Details -->
+                  
+            <!-- end page content -->
+            
+        </div>
+        <!-- end page container -->
+        
+    </div>
+
+
+
+                                        {% endblock %}

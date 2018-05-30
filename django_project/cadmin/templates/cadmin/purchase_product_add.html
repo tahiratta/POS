@@ -1,0 +1,392 @@
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+Add New Product - {{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+<head><style>
+#id_name ,
+#id_description ,
+
+#id_barcode ,
+
+#id_brand ,
+
+#id_colour ,
+
+#id_cost ,
+
+#id_salePrice ,
+
+#id_quantity ,
+
+#id_bill {
+      width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+}</style></head>
+
+
+
+
+<div class="main">
+
+    <!-- <p>&#187; <a href="{% url 'product_list' %}">All Products</a> &#187; Add Product</p>
+
+    <h3>Add Product</h3> -->
+
+    
+
+<div class="page-wrapper">
+        
+        {% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+             {% include "cadmin/sidebar.html" %}
+            <!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Dashboard</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href=#>Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                               <li><a class="parent-item" href="{% url 'product_list' %}">Product</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">Add Purchase</li>
+                            </ol>
+                        </div>
+                    </div>
+                     
+                   
+
+                
+                     <!-- start Payment Details -->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card card-box">
+                                <div class="card-head">
+                                    <header>Add Purchase</header>
+                                    <button id = "panel-button2" 
+                                           class = "mdl-button mdl-js-button mdl-button--icon pull-right" 
+                                           data-upgraded = ",MaterialButton">
+                                           <i class = "material-icons">more_vert</i>
+                                        </button>
+                                        <ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                                           data-mdl-for = "panel-button2">
+                                           <li class = "mdl-menu__item"><i class="material-icons">assistant_photo</i>Action</li>
+                                           <li class = "mdl-menu__item"><i class="material-icons">print</i>Another action</li>
+                                           <li class = "mdl-menu__item"><i class="material-icons">favorite</i>Something else here</li>
+                                        </ul>
+                                </div>
+
+                                                        <p>
+                                                            {{ form.non_field_errors }}
+                                                        </p>
+
+                                <div class="card-body" id="bar-parent2">
+                                    <form action="#" id="form_sample_2" class="form-horizontal" method="POST">    
+                                        <div class="form-body">
+                                             {% csrf_token %}
+                                             {{ form.media }}
+
+                                                <div class="form-group row  ">
+                                                <label class="control-label col-md-3">Supplier
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                    
+                                                        {{ form.supplier.errors }}
+                                                        {{ form.supplier }} 
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3">Name
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                    
+                                                        {{ form.name.errors }}
+                                                         {{ form.name }}
+                                                     
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3">Description
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                   
+                                                        {{ form.description.errors }}
+                                                        {{ form.description }}
+                                                    
+                                                </div>
+                                            </div>
+                                       
+                                         
+                                            <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3">Brand
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                  
+                                                        {{ form.brand.errors }}
+                                                        {{ form.brand }} 
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3">Color
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                   
+                                                       {{ form.colour.errors }}
+                                                       {{ form.colour }} 
+                                                </div>
+                                            </div>
+                                             <div class="form-group row">
+                                                <label class="control-label col-md-3">Cost
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                    
+                                                        {{ form.cost.errors }}
+                                                        {{ form.cost }} 
+                                                </div>
+                                            </div>
+                                             <div class="form-group row">
+                                                <label class="control-label col-md-3">SalePrice
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                    
+                                                        {{ form.salePrice.errors }}
+                                                        {{ form.salePrice }}
+                                                </div>
+                                            </div>
+                                             <div class="form-group row">
+                                                <label class="control-label col-md-3">Quantity
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                    
+                                                       {{ form.quantity.errors }}
+                                                       {{ form.quantity }} 
+                                                </div>
+                                            </div>
+                                           
+                                           
+                                            
+                                         <div class="form-group">
+                                            <div class="offset-md-3 col-md-9">
+                                                <button type="submit" class="btn btn-info" >Add</button>
+                                                <!-- <button type="button" class="btn btn-default">Cancel</button> -->
+                                            </div>
+                                        </div>
+                                       </div>
+                                    </form>
+                                    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    
+                                </div>
+<!-- start Payment Details -->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card  card-box">
+                                <div class="card-head">
+                                    <header>Products Details</header>
+                                    <div class="tools">
+                                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
+                                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
+                                       <!--  <a class="t-close btn-color fa fa-times" href="javascript:;"></a> -->
+                                    </div>
+                                </div>
+                                <div class="card-body ">
+                                    <!-- <form method='GET' action = ''>
+                                        <input type='text' name='q' placeholder='Search Products' value='{{request.GET.q}}' />
+                                        <input type="submit" value="Search"/>
+                                    </form><br> -->
+                                  <div class="table-wrap">
+                                        <div class="table-responsive">
+        
+                                                    
+                                                    {% for product in products %}
+                                                        {% if forloop.first     %}
+                                                            <table   class="table display product-overview mb-30" id="support_table5">
+                                                                <thead >
+                                                                    <th>Id</th>
+                                                                    <th>Name</th>
+                                                                    <th>Description</th>
+                                                                    <th>Barcode</th>
+                                                                    <th>brand</th>
+                                                                    <th>Color</th>
+                                                                    <th>Cost</th>
+                                                                    <th>Sale Price</th>
+                                                                    <th>Quantity</th>
+                                                                    <th>Bill</th>
+                                                                    <th>Date</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                        {% endif %}
+                                                {% if not request.COOKIES.p_id %}
+                                                {% if forloop.first %}
+                                                {% if temp_id != 0 %}      
+                                                     <tr>
+                                                            <td title="{{ product.id }}">{{  temp_id}} </td>
+                                                            <td class="product-name" title="{{ product.name }}">{{   temp_name|truncatechars:50 }}</td>
+                                                            <!-- <td>{{ product.category }}</td> -->
+                                                            <!-- {% if request.user.is_superuser %}
+                                                                <td>{{ product.author }}</td>
+                                                            {% endif %} -->
+
+                                                            <td title="{{ product.description }}">{{ temp_description}}</td>
+                                                            <td title="{{ product.barcode }}">{{ temp_barcode }}</td>
+                                                            <td title="{{ product.brand }}">{{ temp_brand }}</td>
+                                                            <td title="{{ product.colour }}">{{ temp_colour }}</td>
+                                                            <td title="{{ product.cost }}">{{ temp_cost }}</td>
+                                                            <td title="{{ product.salePrice }}">{{ temp_salePrice }}</td>
+                                                            <td title="{{ product.quantity }}">{{ temp_quantity }}</td>
+                                                            <td title="{{ product.bill }}"> {{ temp_bill }} </td>
+
+                     <td title="{{ product.created_at }}">{{ product.created_at|date:"d M Y" }}</td>
+                    <td>
+                        <a href="{% url 'product_update' product.id %}" class="btn btn-tbl-edit btn-xs"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-tbl-delete btn-xs" href= "{% url 'product_delete' product.id %}?next={{ request.get_full_path }}" onclick=" return confirm('Are you sure ?')"><i class="fa fa-trash-o "></i></a>
+                                                            </td>
+                                        
+                                                        </tr>
+                                                 {% endif %}
+                                                  {% endif %}
+                                                        <tr>
+                                                            <td title="{{ product.id }}">{{ product.id}} </td>
+                                                            <td class="product-name" title="{{ product.name }}">{{   product.name|truncatechars:50 }}</td>
+                                                            <!-- <td>{{ product.category }}</td> -->
+                                                            <!-- {% if request.user.is_superuser %}
+                                                                <td>{{ product.author }}</td>
+                                                            {% endif %} -->
+
+                                                            <td title="{{ product.description }}">{{ product.description}}</td>
+                                                            <td title="{{ product.barcode }}">{{ product.barcode_generated }}</td>
+                                                            <td title="{{ product.brand }}">{{ product.brand }}</td>
+                                                            <td title="{{ product.colour }}">{{ product.colour }}</td>
+                                                            <td title="{{ product.cost }}">{{ product.cost }}</td>
+                                                            <td title="{{ product.salePrice }}">{{ product.salePrice }}</td>
+                                                            <td title="{{ product.quantity }}">{{ product.quantity }}</td>
+                                                            <td title="{{ product.bill }}"> {{ product.bill }} </td>
+
+                     <td title="{{ product.created_at }}">{{ product.created_at|date:"d M Y" }}</td>
+                    <td>
+                        <a href="{% url 'product_update' product.id %}" class="btn btn-tbl-edit btn-xs"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-tbl-delete btn-xs" href= "{% url 'product_delete' product.id %}?next={{ request.get_full_path }}" onclick=" return confirm('Are you sure ?')"><i class="fa fa-trash-o "></i></a>
+                                                            </td>
+                                        
+                                                        </tr>
+                                                        {% endif %}
+                                                        {% if forloop.last %}
+                                                            </table>
+                                                        {% endif %}
+
+                                                    {% empty %}
+                                                        No Products
+                                                    {% endfor %}
+
+                                            </div>
+
+                                            {% if products %}
+
+                                                <div class="pagination">
+                                                    <p>
+                                                        {% if products.has_previous %}
+                                                            <a href="?page={{ products.previous_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">&lt; Prev</a> |
+                                                        {% endif %}
+
+                                                        {% if products.has_next %}
+                                                            <a href="?page={{ products.next_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">Next &gt;</a>
+                                                        {% endif %}
+
+                                                        <span>Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+                                                    </p>
+                                                </div>
+
+                                            {% endif %}
+                                           {% if messages %}
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <div class="card-head card-topline-aqua">
+                                        <header>Business Detail</header>
+                                    </div>
+                                    <div class="card-body no-padding height-9">                        
+                                        
+                                        <div class="row list-separated profile-stat">
+                                            <div class="col-md-3 col-sm-3 col-4">
+                                                <div class="uppercase profile-stat-title"> 
+                                                                      
+                                                    <td title="{{purchase.totalbill}}">{{total_bill}} </td>  
+                                                    
+                                                </div>
+                                                <div class="uppercase profile-stat-text"> Total Amount </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-4">
+                                                <div class="uppercase profile-stat-title"> 0 {{total_supplier}} </div>
+                                                <div class="uppercase profile-stat-text"> Discount </div>
+                                                <!-- <input
+                                                  type="edit"
+                                                  id="edit"
+                                                  onclick="return handleEdit()">
+
+                                                  Edit
+                                                </input> -->
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-4">
+                                                <div class="uppercase profile-stat-title"> {{total_amountPaid}}</div>
+                                                <div class="uppercase profile-stat-text"> Amount Paid </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-4">
+                                                <div class="uppercase profile-stat-title"> {{total_balance}} </div>
+                                                <div class="uppercase profile-stat-text"> Balance </div>
+                                            </div>
+                                        </div>
+                                      
+                                        <ul class="nav nav-pills nav-pills-rose">
+                                        <button type="button" class="btn btn-circle btn-success" onclick="window.location.href='{% url 'purchase_list' %}'">Save</button>
+                       
+                                        </ul>
+                                        
+                                        
+                                    </div>
+                                
+
+                                                
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end Payment Details -->
+                                         
+
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

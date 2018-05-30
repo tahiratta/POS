@@ -1,0 +1,229 @@
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+    All Customers - {{ block.super }}
+{% endblock %}
+
+{% block main %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+  <title>My Chart.js Chart</title>
+</head>
+<!-- {% load static %} -->
+
+    <div class="page-wrapper">
+        {% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+            {% include "cadmin/sidebar.html" %}
+			<!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Dashboard</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href="{% url 'index' %}">Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">Dashboard</li>
+                            </ol>
+                        </div>
+                    </div>
+                   <!-- start widget -->
+					<div class="state-overview">
+						<div class="row">
+					        <div class="col-xl-3 col-md-6 col-12">
+                              <div class="info-box bg-blue">
+                                <span class="info-box-icon push-bottom"><i class="material-icons">card_travel</i></span>
+                                <div class="info-box-content">
+                                  <span class="info-box-text">Total</span>
+                                  <span class="info-box-text">Customer</span>
+                                  <div class="progress">
+                                    <div class="progress-bar width-100"></div>
+                                  </div>
+                                  <span class="progress-description">
+                                        {{ customers.paginator.count }}
+                                      </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                              </div>
+                              <!-- /.info-box -->
+                            </div>
+					        <!-- /.col -->
+					        <div class="col-xl-3 col-md-6 col-12">
+                              <div class="info-box bg-orange">
+                                <span class="info-box-icon push-bottom"><i class="material-icons">card_travel</i></span>
+                                <div class="info-box-content">
+                                  <span class="info-box-text">Total</span>
+                                  <span class="info-box-text">Supplier</span>
+                                  <div class="progress">
+                                    <div class="progress-bar width-100"></div>
+                                  </div>
+                                  <span class="progress-description">
+                                        {{ suppliers.paginator.count }}
+                                      </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                              </div>
+                              <!-- /.info-box -->
+                            </div>
+					        <!-- /.col -->
+                           <div class="col-xl-3 col-md-6 col-12">
+                              <div class="info-box bg-purple">
+                                <span class="info-box-icon push-bottom"><i class="material-icons">card_travel</i></span>
+                                <div class="info-box-content">
+                                  <span class="info-box-text">Total</span>
+                                  <span class="info-box-text">Purchase</span>
+                                  <div class="progress">
+                                    <div class="progress-bar width-100"></div>
+                                  </div>
+                                  <span class="progress-description">
+                                        {{ purchases.paginator.count }}
+                                      </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                              </div>
+                              <!-- /.info-box -->
+                            </div>
+					        <!-- /.col -->
+					         <div class="col-xl-3 col-md-6 col-12">
+                              <div class="info-box bg-success">
+                                <span class="info-box-icon push-bottom"><i class="material-icons">card_travel</i></span>
+                                <div class="info-box-content">
+                                  <span class="info-box-text">Total</span>
+                                  <span class="info-box-text">Sale</span>
+                                  <div class="progress">
+                                    <div class="progress-bar width-100"></div>
+                                  </div>
+                                  <span class="progress-description">
+                                        {{ sales.paginator.count }}
+                                      </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                              </div>
+                              <!-- /.info-box -->
+                            </div>
+					        <!-- /.col -->
+					      </div>
+						</div>
+					 <!-- chart start -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-box">
+                                <div class="card-head">
+                                    <header>Chart Survey</header>
+                                    <div class="tools">
+                                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
+                                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
+                                        <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
+                                    </div>
+                                </div>
+                                <!-- <div class="card-body no-padding height-9">
+                                    <div class="row text-center">
+                                        <div class="col-sm-3 col-6">
+                                            <h4 class="margin-0">$ 209 </h4>
+                                            <p class="text-muted"> Today's Income</p>
+                                        </div>
+                                        <div class="col-sm-3 col-6">
+                                            <h4 class="margin-0">$ 837 </h4>
+                                            <p class="text-muted">This Week's Income</p>
+                                        </div>
+                                        <div class="col-sm-3 col-6">
+                                            <h4 class="margin-0">$ 3410 </h4>
+                                            <p class="text-muted">This Month's Income</p>
+                                        </div>
+                                        <div class="col-sm-3 col-6">
+                                            <h4 class="margin-0">$ 78,000 </h4>
+                                            <p class="text-muted">This Year's Income</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div id="area_line_chart" class="width-100"></div>
+                                    </div>
+                                </div> -->
+                                <div class="container-fluid">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <script>
+    let myChart = document.getElementById('myChart').getContext('2d');
+
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = 'Lato';
+    Chart.defaults.global.defaultFontSize = 18;
+    Chart.defaults.global.defaultFontColor = '#777';
+
+    let massPopChart = new Chart(myChart, {
+      type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      data:{
+        labels:['Boston', 'Worcester', 'Springfield', 'Lowell', 'Cambridge', 'New Bedford'],
+        datasets:[{
+          label:'Population',
+          data:[
+            6,
+            12,
+            18,
+            24,
+            30,
+            36
+          ],
+          //backgroundColor:'green',
+          backgroundColor:[
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 159, 64, 0.6)',
+            'rgba(255, 99, 132, 0.6)'
+          ],
+          borderWidth:1,
+          borderColor:'#777',
+          hoverBorderWidth:3,
+          hoverBorderColor:'#000'
+        }]
+      },
+      options:{
+        title:{
+          display:true,
+          text:'Largest Cities In Massachusetts',
+          fontSize:25
+        },
+        legend:{
+          display:true,
+          position:'right',
+          labels:{
+            fontColor:'#000'
+          }
+        },
+        layout:{
+          padding:{
+            left:50,
+            right:0,
+            bottom:0,
+            top:0
+          }
+        },
+        tooltips:{
+          enabled:true
+        }
+      }
+    });
+  </script>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+ 						
+        </div>
+        <!-- end page container -->
+
+
+{% endblock %}        

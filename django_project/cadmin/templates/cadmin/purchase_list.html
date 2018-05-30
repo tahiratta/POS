@@ -1,0 +1,184 @@
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+    All Purchase - {{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+{% load subtractify %}
+    <div class="main">
+
+       <!--  <p>&#187; <a href="{% url 'purchase_list' %}">All Purchase</a> </p>
+
+        <p class="button"><a href="{% url 'purchase_add' %}">Add Purchase &raquo;</a></p> -->
+
+        
+       <!--  <p class="count">Total purchase: {{ purchases.paginator.count }}</p> -->
+
+        <div class="page-wrapper">
+        
+        {% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+             {% include "cadmin/sidebar.html" %}
+            <!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Dashboard</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href="{% url 'index' %}">Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">Purchase</li>
+                            </ol>
+                        </div>
+                    </div>
+                     
+                   <!-- start widget -->
+                    <div class="state-overview">
+                     
+                        <div class="row">
+                          
+                            
+                            <!-- /.col -->
+                            <div class="col-xl-3 col-md-6 col-12">
+                              <div class="info-box bg-blue">
+                                <span class="info-box-icon push-bottom"><i class="material-icons">card_travel</i></span>
+                                <div class="info-box-content">
+                                  <span class="info-box-text">Total</span>
+                                  <span class="info-box-text">Purchase</span>
+                                  <div class="progress">
+                                    <div class="progress-bar width-100"></div>
+                                  </div>
+                                  <span class="progress-description">
+                                        {{ purchases.paginator.count }}
+                                      </span>
+                                </div>
+                                <!-- /.info-box-content -->
+                              </div>
+                              <!-- /.info-box -->
+                            </div>
+                            
+                     
+                        </div>
+                             </div>
+
+                    <ul class="nav nav-pills nav-pills-rose">
+                        <button type="button" class="btn btn-circle btn-success" onclick="window.location.href='{% url 'purchase_add' %}'"><i class="fa fa-plus"></i>Add Purchase</button>
+                       
+                    </ul>
+                     <!-- start Payment Details -->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card  card-box">
+                                <div class="card-head">
+                                    <header>Purchase Details</header>
+                                    <div class="tools">
+                                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
+                                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
+                                        <!-- <a class="t-close btn-color fa fa-times" href="javascript:;"></a> -->
+                                    </div>
+                                </div>
+                                <div class="card-body ">
+                                    <form method='GET' action = ''>
+                                        <input type='text' name='q' placeholder='Search Purchases' value='{{request.GET.q}}' />
+                                        <input type="submit" value="Search"/>
+                                    </form><br>
+                                  <div class="table-wrap">
+                                        <div class="table-responsive">
+                                        
+                                        {% for purchase in purchases %}
+                                            {% if forloop.first     %}
+                                               <table   class="table display purchase-overview mb-30" id="support_table5">
+                                                <thead>
+                                                    <tr>
+                                                        <!-- <th>Id</th> -->
+                                                        <th>Supplier</th>
+                                                        <!-- <th>purchase</th> -->
+                                                        <th>Total Bill</th>
+                                                        <th>Discount</th>
+                                                        <th>Amount Paid</th>
+                                                        <th>Date</th>
+                                                        <!-- <th>Action</th> -->
+                                                    </tr>
+                                                </thead>
+                                            {% endif %}
+                
+                <tr>
+                    
+                    <!-- <td title="{{ purchase.id }}">{{ purchase.supplier.id}}</td> -->
+                    <!-- <td class="purchase-name" title="{{ purchase.name }}">{{ purchase.name|truncatechars:50 }}</td> -->
+                    <!-- <td>{{ supplier.category }}</td> -->
+                    <td title="{{ purchase.id }}">{{ purchase.supplier}}</td>
+                    <!-- <td title="{{ purchase.purchase }}"> {{ purchase.purchase }}</td> -->
+                    <!-- {% if request.user.is_superuser %}
+                        <td>{{ purchase.author }}</td>
+                    {% endif %} -->
+                  
+                                  
+                    <td title="{{purchase.totalbill}}">{{ purchase.totalbill }} </td>  
+                                   
+
+                    <td title="{{ purchase.discount }}">{{purchase.discount}}</td>
+
+                        
+                    <td title="{{ purchase.paidAmount }}">{{ purchase.paidAmount }}</td>
+                    
+                    <td title="{{ purchase.created_at }}">{{ purchase.created_at|date:"d M Y" }}</td>
+                </tr>
+
+                {% if forloop.last %}
+                    </table>
+                {% endif %}
+
+            {% empty %}
+                No Purchases
+            {% endfor %}
+
+    </div>
+
+    {% if purchases %}
+
+        <div class="pagination">
+            <p>
+                {% if purchases.has_previous %}
+                    <a href="?page={{ purchases.previous_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">&lt; Prev</a> |
+                {% endif %}
+
+                {% if purchases.has_next %}
+                    <a href="?page={{ purchases.next_page_number }}{% if request.GET.q %}&q={{request.GET.q}}{% endif %}">Next &gt;</a>
+                {% endif %}
+
+                <span>Page {{ purchases.number }} of {{ purchases.paginator.num_pages }}</span>
+            </p>
+        </div>
+
+    {% endif %}
+{% if messages %}
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end Payment Details -->
+                  
+            <!-- end page content -->
+            
+        </div>
+        <!-- end page container -->
+        
+    </div>
+
+
+
+ {% endblock %}

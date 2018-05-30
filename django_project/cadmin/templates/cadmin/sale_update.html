@@ -1,0 +1,149 @@
+
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+Update  New Sale - {{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+<head><style>
+#id_customer ,
+#id_product ,
+
+#id_discount ,
+
+#id_receivedAmount  {
+      width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+}</style></head>
+
+
+<div class="main">
+
+    
+
+
+    
+
+    <div class="page-wrapper">
+        
+        {% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+             {% include "cadmin/sidebar.html" %}
+            <!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Dashboard</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href=#>Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                               <li><a class="parent-item" href="{% url 'sale_list' %}">Sale</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">Update  Sale</li>
+                            </ol>
+                        </div>
+                    </div>
+                     
+                   
+
+                
+                     <!-- start Payment Details -->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card card-box">
+                                <div class="card-head">
+                                    <header>Update  Sale</header>
+                                    <button id = "panel-button2" 
+                                           class = "mdl-button mdl-js-button mdl-button--icon pull-right" 
+                                           data-upgraded = ",MaterialButton">
+                                           <i class = "material-icons">more_vert</i>
+                                        </button>
+                                        <ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                                           data-mdl-for = "panel-button2">
+                                           <li class = "mdl-menu__item"><i class="material-icons">assistant_photo</i>Action</li>
+                                           <li class = "mdl-menu__item"><i class="material-icons">print</i>Another action</li>
+                                           <li class = "mdl-menu__item"><i class="material-icons">favorite</i>Something else here</li>
+                                        </ul>
+                                </div>
+
+                                                <p>
+                                                    {{ form.non_field_errors }}
+                                                </p>
+
+                                <div class="card-body" id="bar-parent2">
+                                    <form action="#" id="form_sample_2" class="form-horizontal" method="POST">
+                                        <div class="form-body">
+                                                    {% csrf_token %}
+                                                    {{ form.media }}
+
+                                             <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3">Customer
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                    {{ form.customer.errors }}
+                                                    {{ form.customer }}
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3">Product
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                     {{ form.product.errors }}
+                                                     {{ form.product }}
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="control-label col-md-3">Discount
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                     {{ form.discount.errors }}
+                                                     {{ form.discount }}
+                                                </div>
+                                            </div>
+                                            
+                                             <!-- <div class="form-group row">
+                                                <label class="control-label col-md-3">ReceievedAmount
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                    {{ form.receivedAmount.errors }}
+                                                    {{ form.receivedAmount }}
+                                                </div>
+                                            </div> -->
+                                            
+                                           
+                                        
+                                        </div>
+                                         <div class="form-group">
+                                            <div class="offset-md-3 col-md-9">
+                                                <button type="submit" class="btn btn-info">Submit</button>
+                                                <button type="button" class="btn btn-default">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+{% endblock %}

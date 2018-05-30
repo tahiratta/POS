@@ -1,0 +1,454 @@
+
+{% extends "cadmin/base_admin.html" %}
+
+{% block title %}
+Add New Purchase - {{ block.super }}
+{% endblock %}
+
+{% block main %}
+
+<head><style>
+
+#id_supplier ,
+#id_totalBill ,
+
+#id_discount ,
+
+#id_paidAmount  {
+      width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+}
+.item {
+  display: inline-block;
+  position: relative;
+}
+.t-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+</style>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Code adapted from http://djangosnippets.org/snippets/1389/
+  function updateElementIndex(el, prefix, ndx) {
+    var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+    var replacement = prefix + '-' + ndx + '-';
+    if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
+ replacement));
+    if (el.id) el.id = el.id.replace(id_regex, replacement);
+    if (el.name) el.name = el.name.replace(id_regex, replacement);
+    if (el.description) el.description = el.description.replace(id_regex, replacement);
+    if (el.brand) el.brand = el.brand.replace(id_regex, replacement);
+    if (el.colour) el.colour = el.colour.replace(id_regex, replacement);
+    if (el.cost) el.cost = el.cost.replace(id_regex, replacement);
+    if (el.salePrice) el.salePrice = el.salePrice.replace(id_regex, replacement);
+    if (el.quantity) el.quantity = el.quantity.replace(id_regex, replacement);
+    if (el.bill) el.bill = el.bill.replace(id_regex, replacement);
+  }
+
+  var form0bill = 0;
+  //Calculate both inputs value on the fly
+    $('.calculate').keyup(function () {
+        var this_div = $(this).parent().parent();
+        // console.log(this_div);
+
+        // console.log(this_div.children().children('#id_form-0-cost').val());
+        var Tot = parseFloat(this_div.children().children('#id_form-0-cost').val()) *
+         parseFloat(this_div.children().children('#id_form-0-quantity').val());
+         this_div.children().children('#id_form-0-bill').val(Tot.toFixed(2));
+         form0bill = Tot;
+         var total_sum_a = 0;
+        $('.item').each(function(){
+            total_sum_a += parseFloat(($(this).children().children().children().children('#id_form-0-bill').val()));
+            // console.log(parseFloat(($(this).children().children().children().children('#id_form-0-bill').val())));
+            // console.log(total_sum_a);
+            $("#id_totalBill").val(form0bill.toFixed(2));
+            
+            // console.log(total_sum_a) 
+            var Total = total_sum_a - parseFloat($('#id_discount').val());
+            $("#id_totalBill").val(Total.toFixed(2));
+            // console.log(Total)
+        });
+
+    });
+    //Clear both inputs first time when user focus on each inputs and clear value 00
+    // $('.calculate').focus(function (event) {
+    //     $(this).val("").unbind(event);
+    // });
+
+
+  function deleteForm(btn, prefix) {
+    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+
+    if (formCount > 1) {
+      // Delete the item/form
+      $(btn).parents('.item').remove();
+
+      var forms = $('.item'); // Get all the forms
+
+      // Update the total number of forms (1 less than before)
+      $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+
+      var i = 0;
+      // Go through the forms and set their indices, names and IDs
+      for (formCount = forms.length; i < formCount; i++) {
+        $(forms.get(i)).children().children().each(function() {
+          updateElementIndex(this, prefix, i);
+        });
+      }
+
+    } // End if
+    else {
+        alert("You have to enter at least one item!");
+    }
+    return false;
+  }
+
+
+  function addForm(btn, prefix) {
+    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val())
+    // You can only submit a maximum of 10 todo items 
+    if (formCount < 10) {
+      // Clone a form (without event handlers) from the first form
+      var row = $(".item:first").clone(false).get(0);
+      // Insert it after the last form
+      $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
+      
+      // Remove the bits we don't want in the new row/form
+      // e.g. error messages
+      $(".errorlist", row).remove();
+      $(row).children().children().removeClass('error');
+      // console.log($(row).children().children());
+    
+      // Relabel/rename all the relevant bits
+      $(row).children().children().children().children().each(function() {
+        // console.log($(row).children().children().children().children());
+        updateElementIndex(this, prefix, formCount);
+        if ( $(this).attr('type') == 'text')
+          $(this).val('');
+        if ($(this).attr('type') == 'number')
+          $(this).val('0');
+        // console.log($(row).children().children().children().children());
+
+      });
+
+      //Calculate both inputs value on the fly
+    $('.calculate').keyup(function () {
+        var this_div = $(this).parent().parent();
+        // console.log(this_div);
+        // var cost = cost;
+        // var quantity = quantity;
+        // console.log('cost'+ parseFloat(this_div.children().children('#id_form-' + parseInt(formCount) + '-cost').val()));
+        // console.log('quantity'+ parseFloat(this_div.children().children('#id_form-' + parseInt(formCount) + '-quantity').val()));
+
+        // var count = count;
+        // console.log('count'+ formCount);
+        // console.log(this_div.children().children());
+
+        // console.log( JSON.stringfy(prefix) );
+
+        var temp1=parseFloat(this_div.children().children('#id_form-' + parseInt(formCount) + '-cost').val());
+        var temp2=parseFloat(this_div.children().children('#id_form-' + parseInt(formCount) + '-quantity').val());
+        var Tot = parseFloat(temp1) * parseFloat(temp2)
+        this_div.children().children('#id_form-' + parseInt(formCount) + '-bill').val(Tot.toFixed(2));
+         // var bill = bill;
+         // console.log('bill'+ Tot);
+         // var temp3 = temp3;
+         // console.log('temp3'+ temp3);
+         // var temp4 = temp4;
+         // console.log('temp4'+ temp4);
+         
+         
+         var total_sum_a = form0bill;
+         var countcb = 0;
+        $('.item').each(function(){
+            // console.log(form0bill);
+            // console.log(total_sum_a);
+            // console.log(Tot);
+            
+    
+            if (countcb > 0) {
+              total_sum_a = total_sum_a + Tot
+            
+            }
+            countcb = countcb + 1
+            var sum = sum;
+            console.log('sum'+ total_sum_a);
+            $("#id_totalBill").val(total_sum_a.toFixed(2));
+             
+            // var Total = total_sum_a - parseInt($('#id_discount').val());
+            // var discount = discount;
+            // console.log('discount'+ $('#id_discount').val());
+            // $("#id_totalBill").val(Total);
+            // var Total = Total;
+            // console.log('Total' +Total.toFixed(2))
+        });
+    });
+    //Clear both inputs first time when user focus on each inputs and clear value 00
+    // $('.calculate').focus(function (event) {
+    //     $(this).val("").unbind(event);
+    // });
+
+      // Add an event handler for the delete item/form link 
+      $(row).find('.t-close').click(function() {
+        return deleteForm(this, prefix);
+      });
+
+      // Update the total form count
+      $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1); 
+
+    } // End if
+    else {
+      alert("Sorry, you can only enter a maximum of ten items.");
+    }
+    return false;
+  }
+
+  // Register the click event handlers
+  $("#add").click(function() {
+    return addForm(this, 'form');
+  });
+  
+  $(".t-close").click(function() {
+    return deleteForm(this, 'form');
+  });
+
+
+});
+</script>
+</head>
+
+<div class="main">
+
+   <!--  <p>&#187; <a href="{% url 'purchase_list' %}">All Purchases</a> &#187; Add Purchase</p>
+
+    <h3>Add Purchase</h3> -->
+
+
+    
+
+    <div class="page-wrapper">
+        
+        {% include "cadmin/header.html" %}
+        <!-- start page container -->
+        <div class="page-container">
+             {% include "cadmin/sidebar.html" %}
+            <!-- start page content -->
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title">Dashboard</div>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href=#>Home</a>&nbsp;<i class="fa fa-angle-right"></i>
+                               <li><a class="parent-item" href="{% url 'purchase_list' %}">Purchase</a>&nbsp;<i class="fa fa-angle-right"></i>
+                                </li>
+                                <li class="active">Add Purchase</li>
+                            </ol>
+                        </div>
+                    </div>
+                     
+                     <!-- start Payment Details -->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card card-box">
+                                <div class="card-head">
+                                    <header>Add Purchase</header>
+                                    <button id = "panel-button2" 
+                                           class = "mdl-button mdl-js-button mdl-button--icon pull-right" 
+                                           data-upgraded = ",MaterialButton">
+                                           <i class = "material-icons">more_vert</i>
+                                        </button>
+                                        <ul class = "mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                                           data-mdl-for = "panel-button2">
+                                           <li class = "mdl-menu__item"><i class="material-icons">assistant_photo</i>Action</li>
+                                           <li class = "mdl-menu__item"><i class="material-icons">print</i>Another action</li>
+                                           <li class = "mdl-menu__item"><i class="material-icons">favorite</i>Something else here</li>
+                                        </ul>
+                                </div>
+
+                                                    <p>
+                                                        {{ purchase_form.non_field_errors }}
+                                                    </p>
+
+                                <div class="card-body" id="bar-parent2">
+                                    <form action="#" id="form_sample_2" class="form-horizontal" method="POST">
+                                        <div class="form-body">
+                                             {% csrf_token %}
+                                             {{ purchase_form.media }}
+
+                                              <div class="card-body" id="bar-parent2">
+                                    <form action="#" id="form_sample_2" class="form-horizontal" >
+                                        <div class="form-body">
+                                            <div class="form-group row  margin-top-20">
+                                                <label class="control-label col-md-3">Supplier
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4" >
+                                                   {{ purchase_form.supplier.errors }}
+                                                   {{ purchase_form.supplier }}
+
+                                                </div>
+                                            </div>
+
+                                            <!-- productproduct_formset here -->
+                                             <p>
+                                        {{ form.non_field_errors }}
+                                            </p>
+                                            {% csrf_token %}
+                                            {{ form.media }}
+                                            
+                                            <div class="form-group row  margin-top-20"> 
+                                                <label class="control-label col-md-1">
+                                                </label>
+                                                    <div class="col-md-12">
+                                                        <h2>Products</h2>
+    {{ product_formset.management_form }}
+    {% for form in product_formset.forms %}
+
+<div id="template" class="item panel panel-info">
+<p>
+
+<a class="t-close btn-color fa fa-times href="javascript:;"></a>
+<fieldset id="fieldsets">
+<!-- <legend id="legends">Product #  String(_counter+1)</legend> -->
+<form method = "POST" action = "">
+<div class="row"> 
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;">
+<input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token }}" />
+<label for="id_form-0-name">Name <span style="color: #e02222;" class="required"> * </span></label> {{form.name.errors}}{{form.name}}
+</div>
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;">
+<label for="id_form-0-description">Description<span style="color: #e02222;" class="required"> * </span></label> {{form.description.errors}}{{form.description}}
+</div> 
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;"> 
+<label for="id_form-0-brand">Brand<span style="color: #e02222;" class="required"> * </span></label> {{form.brand.errors}}{{form.brand}}
+</div> 
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;"> 
+<label for="id_form-0-colour">Colour<span style="color: #e02222;" class="required"> * </span></label> {{form.colour.errors}}{{form.colour}}
+</div>
+</div>
+<div class="row">
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;"> 
+<label for="id_form-0-cost">Cost<span style="color: #e02222;" class="required"> * </span></label> {{form.cost.errors}}{{form.cost}}
+</div> 
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;"> 
+<label for="id_form-0-salePrice">Sale Price<span style="color: #e02222;" class="required"> * </span></label> {{form.salePrice.errors}}{{form.salePrice}}
+</div> 
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;"> 
+<label for="id_form-0-quantity">Quantity<span style="color: #e02222;" class="required"> * </span></label> {{form.quantity.errors}}{{form.quantity}}   
+</div>
+<div class="col-lg-3" style="padding-left:20px; padding-right:20px;"> 
+<label for="id_form-0-bill">Bill<span style="color: #e02222;" class="required"> * </span></label> {{form.bill.errors}}{{form.bill}}   
+</div>
+</div>
+</form>
+ </fieldset>
+</p>
+</div>
+
+    {% endfor %}
+                                                
+                                                    
+                                                    
+                                                    <div class="form-group">
+                                            <div class="offset-md-3 col-md-9">
+                                                <p><button class="btn btn-success" type="button" name="Submit" id="add" onclick="#">+Add item</button></p>
+                                                <!-- <button type="button" class="btn btn-default">Cancel</button> -->
+                                            </div>
+                                        </div>
+
+                                                </div>
+                                            
+
+                                                <!-- <p>
+                                                    <button class="btn btn-success" type="button" name="Submit" onclick="Add();">+Add Product</button>
+                                                </p>
+                                                </div>
+                                                </div> -->
+
+                                                <!-- <div class="form-group">
+                                                    <div class="offset-md-3 col-md-9">
+                                                <input class="btn btn-info" type = 'submit' value="Submit"/>
+                                                </div>
+                                                </div> -->
+                                                <!-- <div class="form-group">
+                                                </div> -->
+                                            
+                                            
+                                        
+                                            <!-- </div>
+                                        
+                                            </div> -->
+                                        
+                                            <!-- to there -->
+
+                                            <div class="form-group row">
+                                                <label class="control-label col-md-0">Total Bill
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-2">
+                                                     {{ purchase_form.totalBill.errors }}
+                                                     {{ purchase_form.totalBill }}
+                                                </div>
+                                                <label class="control-label col-md-0">Discount
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-2">
+                                                     {{ purchase_form.discount.errors }}
+                                                     {{ purchase_form.discount }}
+                                                </div>
+                                                <label class="control-label col-md-0">PaidAmount
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-2">
+                                                    {{ purchase_form.paidAmount.errors }}
+                                                    {{ purchase_form.paidAmount }}
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- <div class="form-group row">
+                                                <label class="control-label col-md-3">Discount
+                                                    <span class="required"> * </span>
+                                                </label>
+                                                <div class="col-md-4">
+                                                     {{product_formset.discount.errors }}
+                                                     {{product_formset.discount }}
+                                                </div>
+                                            </div> -->                                   
+                                        
+                                        </div>
+                                         <div class="form-group">
+                                            <div class="offset-md-3 col-md-9">
+                                                <button type="submit" class="btn btn-info">Submit</button>
+                                                <!-- <button type="button" class="btn btn-default">Cancel</button> -->
+                                            </div>
+                                        </div>
+                                    </form>
+                                    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</div>
+
+
+ {% endblock %}
+
+
